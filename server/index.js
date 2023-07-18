@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 
 //Get all posts
 app.get("/posts", async (req, res) => {
-  const url = `${process.env.ASTRA_URL}?page-size=3`;
+  const url = `${process.env.ASTRA_URL}`;
 
   const options = {
     method: "GET",
