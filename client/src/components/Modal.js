@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const Modal = () => {
+const Modal = ({ mode, setMode }) => {
+  console.log(mode);
   const [form, setForm] = useState({
     line: "",
   });
@@ -12,13 +13,19 @@ const Modal = () => {
     e.preventDefault();
   };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name + ":" + value);
+  };
 
   return (
     <div className="overlay">
       <div className="modal">
         <form onSubmit={handleSubmit}>
-          <div className="close-icon">x</div>
+          <div className="close-icon" onClick={() => setMode(null)}>
+            x
+          </div>
           <h1>{createMode ? "Add" : "Edit"} your adventure</h1>
           <h5>Upload a photo of where you have visited</h5>
           <p>Paste a url from the internet</p>
@@ -43,3 +50,4 @@ const Modal = () => {
     </div>
   );
 };
+export default Modal;

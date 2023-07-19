@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState(null);
+  const [mode, setMode] = useState(null);
 
   const fetchData = async () => {
     const response = await axios.get("http://localhost:8000/posts");
@@ -29,7 +30,7 @@ const Dashboard = () => {
             <h1>Adventure anywhere</h1>
             <p>Keep calm & travel on</p>
           </div>
-          <button>Add your adventure</button>
+          <button onClick={() => setMode("create")}>Add your adventure</button>
         </div>
         <div className="posts-container">
           {posts?.map((post) => (
@@ -39,6 +40,7 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+      {mode && <Modal mode={mode} setMode={setMode} />}
     </div>
   );
 };
