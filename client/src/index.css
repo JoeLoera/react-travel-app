@@ -193,3 +193,43 @@ footer {
   justify-content: center;
   align-items: center;
 }
+
+/* Form */
+form {
+  padding: 30px;
+}
+
+form input {
+  margin: 5px 0 0 0;
+  padding: 10px 13px;
+  border-radius: 12px;
+  border: solid 1.5px rgb(230, 232, 236);
+}
+
+form .input-container {
+  display: flex;
+  flex-direction: column;
+  margin: 6px 0;
+}
+
+form .multi-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+form .main-inputs {
+  width: 300px;
+}
+
+.image-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  background-color: rgb(232, 232, 232);
+  margin: 45px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 150%;
+}
