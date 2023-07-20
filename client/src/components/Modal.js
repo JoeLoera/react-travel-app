@@ -14,9 +14,10 @@ const Modal = ({ mode, setMode }) => {
   };
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    console.log(name + ":" + value);
+    console.log(e);
+    // const name = e.target.name;
+    // const value = e.target.value;
+    // console.log(name + ":" + value);
   };
 
   return (
@@ -34,7 +35,7 @@ const Modal = ({ mode, setMode }) => {
             <div class="input-container">
               <label for="line">FIRST LINE</label>
               <input
-                for="line"
+                id="line"
                 placeholder="First Line of Address"
                 required
                 name="line"

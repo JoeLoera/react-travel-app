@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
-import Modal from "../components/Modal";
+import Modal from "../components/modal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
