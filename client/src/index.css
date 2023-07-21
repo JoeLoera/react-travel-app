@@ -221,6 +221,14 @@ form .main-inputs {
   width: 300px;
 }
 
+form input[type="submit"] {
+  background-color: rgb(68, 65, 248);
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 12px 22px;
+  border-radius: 90px;
+}
+
 .image-preview {
   width: 150px;
   height: 150px;
@@ -232,4 +240,51 @@ form .main-inputs {
 
 .image-preview img {
   width: 150%;
+}
+
+/* Post Page */
+.post-page {
+  display: flex;
+  justify-content: center;
+}
+
+.post-page-container {
+  width: 76%;
+  background-color: rgb(255, 255, 255);
+}
+
+.post-page .info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-page .title-container {
+  padding: 30px;
+}
+
+.post-page .button-container {
+  display: flex;
+  align-items: center;
+}
+
+.post-page .button-container button {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  padding: 1px;
+  border: solid 1.5px rgb(150, 150, 150);
+  color: rgb(24, 24, 24);
+  margin: 5px;
+  background-color: transparent;
+}
+
+.post-page .image-container {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.post-page .image-container img {
+  width: 100%;
+  border-radius: 25px;
 }

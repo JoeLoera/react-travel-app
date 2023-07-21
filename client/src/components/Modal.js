@@ -1,13 +1,27 @@
 import { useState } from "react";
 
-const Modal = ({ mode, setMode }) => {
-  console.log(mode);
+const Modal = ({ mode, setMode, currentPost }) => {
+  console.log(currentPost);
   const [form, setForm] = useState({
-    line: "",
+    title: currentPost?.data.title || "",
+    description: currentPost?.data.description || "",
+    line: currentPost?.data.line || "",
+    town: currentPost?.data.town || "",
+    reion: currentPost?.data.region || "",
+    country: currentPost?.data.country || "",
+    longitude: currentPost?.data.address.coords[0] || undefined,
+    latitude: currentPost?.data.address.coords[1] || undefined,
+    photo: currentPost?.data.photo || "",
+    website: currentPost?.data.website || "",
+    nature: currentPost?.data.tags.includes("nature") || false,
+    mountains: currentPost?.data.tags.includes("mountains") || false,
+    hiking: currentPost?.data.tags.includes("hiking") || false,
+    beach: currentPost?.data.tags.includes("beach") || false,
+    sun: currentPost?.data.tags.includes("sun") || false,
   });
 
   console.log(form);
-  const createMode = true;
+  const createMode = mode === "create";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -208,6 +222,18 @@ const Modal = ({ mode, setMode }) => {
                 type="checkbox"
                 name="sun"
                 checked={form.sun}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="multi-input">
+            <div className="input-container">
+              <label for="nature-checkbox">Nature</label>
+              <input
+                id="nature-checkbox"
+                type="checkbox"
+                name="nature"
+                checked={form.nature}
                 onChange={handleChange}
               />
             </div>
