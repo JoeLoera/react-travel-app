@@ -23,7 +23,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="app">
+    <div className="app" style={mode && { height: "76vh", overflow: "hidden" }}>
       <div className="dashboard">
         <div className="dashboard-info-container">
           <div>
@@ -38,9 +38,14 @@ const Dashboard = () => {
               <Card post={post[1]} />
             </Link>
           ))}
+          <div className="add-your-own">
+            <button onClick={() => setMode("create")}>
+              Add your adventure
+            </button>
+          </div>
         </div>
       </div>
-      {mode && <Modal mode={mode} setMode={setMode} />}
+      {mode && <Modal mode={mode} setMode={setMode} fetchData={fetchData} />}
     </div>
   );
 };

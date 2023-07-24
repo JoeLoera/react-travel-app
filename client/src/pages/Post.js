@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../components/Modal";
+import Map from "../components/Map";
 import axios from "axios";
 
 const Post = () => {
@@ -9,7 +10,7 @@ const Post = () => {
 
   const { id } = useParams();
 
-  console.log(id);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     const response = await axios.get(`http://localhost:8000/posts/${id}`);
@@ -17,6 +18,12 @@ const Post = () => {
   };
 
   console.log(post);
+
+  const deletePost = async () => {
+    const response = await axios.delete(`http://localhost:8000/delete/${id}`);
+    const success = response.status === 200;
+    if (success) navigate("/");
+  };
 
   useEffect(() => {
     fetchData();
@@ -30,22 +37,29 @@ const Post = () => {
             <h1>{post?.data.title}</h1>
             <h4>{post?.data.description}</h4>
             <p>
-              {post?.data.address.region}, {post?.data.address.country},
+              {post?.data.address.region}, {post?.data.address.country},{" "}
               {post?.data.website}
             </p>
           </div>
 
           <div className="button-container">
-            <button>X</button>
+            <button onClick={deletePost}>X</button>
             <button onClick={() => setMode("edit")}>✎</button>
           </div>
         </div>
         <div className="image-container">
-          {/* <Map /> */}
+          <Map coords={post?.data.address.coords} />
           <img src={post?.data.photo} alt={`${post?.data.title} photo`} />
         </div>
 
-        {mode && <Modal mode={mode} setMode={setMode} currentPost={post} />}
+        {mode && (
+          <Modal
+            mode={mode}
+            setMode={setMode}
+            fetchData={fetchData}
+            currentPost={post}
+          />
+        )}
       </div>
     </div>
   );

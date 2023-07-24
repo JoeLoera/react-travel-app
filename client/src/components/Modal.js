@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { getTags } from "../helpers";
+import axios from "axios";
 
-const Modal = ({ mode, setMode, currentPost }) => {
-  console.log(currentPost);
+const Modal = ({ mode, setMode, fetchData, currentPost }) => {
   const [form, setForm] = useState({
     title: currentPost?.data.title || "",
     description: currentPost?.data.description || "",
-    line: currentPost?.data.line || "",
-    town: currentPost?.data.town || "",
-    reion: currentPost?.data.region || "",
-    country: currentPost?.data.country || "",
+    line: currentPost?.data.address.line || "",
+    town: currentPost?.data.address.town || "",
+    region: currentPost?.data.address.region || "",
+    country: currentPost?.data.address.country || "",
     longitude: currentPost?.data.address.coords[0] || undefined,
     latitude: currentPost?.data.address.coords[1] || undefined,
     photo: currentPost?.data.photo || "",
@@ -20,17 +21,64 @@ const Modal = ({ mode, setMode, currentPost }) => {
     sun: currentPost?.data.tags.includes("sun") || false,
   });
 
-  console.log(form);
   const createMode = mode === "create";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const data = {
+      title: form.title,
+      address: {
+        line: form.line,
+        town: form.town,
+        region: form.region,
+        country: form.country,
+        coords: [Number(form.longitude), Number(form.latitude)],
+      },
+      photo: form.photo,
+      website: form.website,
+      description: form.description,
+      tags: getTags(form),
+    };
+
+    try {
+      if (createMode) {
+        const response = await axios.post("http://localhost:8000/create", {
+          data,
+        });
+        const success = response.status === 200;
+
+        if (success) {
+          setMode(null);
+          fetchData();
+        } else {
+          console.error(response);
+        }
+      } else {
+        const response = await axios.put(
+          `http://localhost:8000/edit/${currentPost.documentId}`,
+          {
+            data,
+          }
+        );
+        const success = response.status === 200;
+
+        if (success) {
+          setMode(null);
+          fetchData();
+        } else {
+          console.error(response);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleChange = (e) => {
-    console.log(e);
     const name = e.target.name;
-    const value = e.target.value;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
 
     setForm((prevState) => ({
       ...prevState,
@@ -43,7 +91,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
       <div className="modal">
         <form onSubmit={handleSubmit}>
           <div className="close-icon" onClick={() => setMode(null)}>
-            x
+            ⨉
           </div>
           <h1>{createMode ? "Add" : "Edit"} your adventure</h1>
           <h5>Upload a photo of where you have visited</h5>
@@ -55,6 +103,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 <img src={form.photo} alt="uploaded photo preview" />
               )}
             </div>
+
             <div className="main-inputs">
               <div className="input-container">
                 <label htmlFor="photo">PHOTO</label>
@@ -70,11 +119,11 @@ const Modal = ({ mode, setMode, currentPost }) => {
               <div className="input-container">
                 <label htmlFor="title">TITLE</label>
                 <input
-                  id="photo"
-                  name="photo"
-                  placeholder="Photo URL goes here"
+                  id="title"
+                  name="title"
+                  placeholder="Title of your post"
                   required
-                  value={form.photo}
+                  value={form.title}
                   onChange={handleChange}
                 />
               </div>
@@ -83,9 +132,9 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 <input
                   id="website"
                   name="website"
-                  placeholder="Website URL goes here"
+                  placeholder="Website goes here"
                   required
-                  value={form.photo}
+                  value={form.website}
                   onChange={handleChange}
                 />
               </div>
@@ -102,6 +151,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
               onChange={handleChange}
             />
           </div>
+
           <div className="multi-input">
             <div className="input-container">
               <label htmlFor="line">FIRST LINE</label>
@@ -130,13 +180,14 @@ const Modal = ({ mode, setMode, currentPost }) => {
               <input
                 id="town"
                 name="town"
-                placeholder="Town (or city"
+                placeholder="Town (or city)"
                 required
                 value={form.town}
                 onChange={handleChange}
               />
             </div>
           </div>
+
           <div className="multi-input">
             <div className="input-container">
               <label htmlFor="longitude">LONGITUDE</label>
@@ -161,6 +212,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="input-container">
               <label htmlFor="region">REGION</label>
               <input
@@ -173,6 +225,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
               />
             </div>
           </div>
+
           <div className="multi-input">
             <div className="input-container">
               <label htmlFor="nature-checkbox">Nature</label>
@@ -195,6 +248,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="input-container">
               <label htmlFor="hiking-checkbox">Hiking</label>
               <input
@@ -205,6 +259,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="input-container">
               <label htmlFor="beach-checkbox">Beach</label>
               <input
@@ -215,6 +270,7 @@ const Modal = ({ mode, setMode, currentPost }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="input-container">
               <label htmlFor="sun-checkbox">Sun</label>
               <input
@@ -226,20 +282,10 @@ const Modal = ({ mode, setMode, currentPost }) => {
               />
             </div>
           </div>
-          <div className="multi-input">
-            <div className="input-container">
-              <label for="nature-checkbox">Nature</label>
-              <input
-                id="nature-checkbox"
-                type="checkbox"
-                name="nature"
-                checked={form.nature}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+
           <br />
-          <input type="submit" value="Submit for review →" />
+
+          <input type="submit" value="Submit for review  →" />
         </form>
       </div>
     </div>
